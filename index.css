@@ -164,6 +164,7 @@ body>div,main>a{
   justify-content: space-around;
   position: relative;
   top: 55%;
+  /* width: 160%; */
 }
 #status>div:nth-child(1)>div>p{
   color: #ffffff;
@@ -178,12 +179,11 @@ body>div,main>a{
   cursor: pointer;
 }
 canvas{
-    margin: auto;
-    margin-left: 20px;
     background: transparent;
     border-bottom: 3px solid hsl(165, 69%, 55%);
-    margin-top: -20px;
-    /* color: hsl(165, 69%, 55%); */
+    position: absolute;
+    top: -21%;
+    right: 0%;
 }
 
 

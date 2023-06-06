@@ -15,293 +15,287 @@ if (h >= 5 && h < 12) {
 document.getElementById('greeting').innerText = greeting
 // console.log(greeting);
 
-window.addEventListener('DOMContentLoaded', () => {
-})
+window.addEventListener("DOMContentLoaded",() => {
+	const t = new Tree("canvas");
+});
 
-// eslint-disable-next-line no-unused-vars
 class Tree {
-  constructor (qs) {
-    this.C = document.querySelector(qs)
-    this.c = this.C?.getContext('2d')
-    this.S = window.devicePixelRatio
-    this.W = 100
-    this.H = 100
-    this.branches = []
-    this.darkTheme = false
-    this.debug = false
-    this.decaying = false
-    this.floorY = 5
-    this.fruit = []
-    this.gravity = 0.098
-    this.loopDelay = 50
-    this.loopEnd = Utils.dateValue
-    this.maxGenerations = 11
+	constructor(qs) {
+		this.C = document.querySelector(qs);
+		this.c = this.C?.getContext("2d");
+		this.S = window.devicePixelRatio;
+		this.W = 800;
+		this.H = 800;
+		this.branches = [];
+		this.darkTheme = false;
+		this.debug = false;
+		this.decaying = false;
+		this.floorY = 800;
+		this.fruit = [];
+		this.gravity = 0.0098;
+		this.loopDelay = 100;
+		this.loopEnd = Utils.dateValue;
+		this.maxGenerations = 10;
 
-    if (this.C) this.init()
-  }
+		if (this.C) this.init();
+	}
+	get allBranchesComplete() {
+		const { branches, maxGenerations } = this;
 
-  get allBranchesComplete () {
-    const { branches, maxGenerations } = this
+		return branches.filter(b => {
+			const isLastGen = b.generation === maxGenerations;
+			return b.progress >= 1 && isLastGen;
+		}).length > 0;
+	}
+	get allFruitComplete() {
+		return !!this.fruit.length && this.fruit.every(f => f.progress === 1);
+	}
+	get allFruitFalling() {
+		return !!this.fruit.length && this.fruit.every(f => f.timeUntilFall <= 0);
+	}
+	get debugInfo() {
+		return [
+			{ item: 'Pixel Ratio', value: this.S },
+			{ item: 'Branches', value: this.branches.length },
+			{ item: 'Branches Complete', value: this.allBranchesComplete },
+			{ item: 'Decaying', value: this.decaying },
+			{ item: 'Fruit', value: this.fruit.length },
+			{ item: 'Fruit Complete', value: this.allFruitComplete }
+		];
+	}
+	get lastGeneration() {
+		const genIntegers = this.branches.map(b => b.generation);
+		return [...new Set(genIntegers)].pop();
+	}
+	get trunk() {
+		return {
+			angle: 0,
+			angleInc: 20,
+			decaySpeed: 0.0625,
+			diameter: 10,
+			distance: 120,
+			distanceFade: 0.2,
+			generation: 2,
+			growthSpeed: 0.04,
+			hadBranches: false,
+			progress: 0,
+			x1: 400,
+			y1: 800,
+			x2: 400,
+			y2: 580
+		};
+	}
+	detectTheme(mq) {
+		this.darkTheme = mq.matches;
+	}
+	draw() {
+		const { c, W, H, debug, branches, fruit } = this;
 
-    return branches.filter(b => {
-      const isLastGen = b.generation === maxGenerations
-      return b.progress >= 1 && isLastGen
-    }).length > 0
-  }
+		c.clearRect(0,0,W,H);
 
-  get allFruitComplete () {
-    return !!this.fruit.length && this.fruit.every(f => f.progress === 0)
-  }
+		const foreground = `hsl(165, 69%, 55%)`;
+		c.fillStyle = foreground;
+		c.strokeStyle = foreground;
 
-  get allFruitFalling () {
-    return !!this.fruit.length && this.fruit.every(f => f.timeUntilFall <= 0)
-  }
+		// debug info
+		if (debug === true) {
+			const textX = 24;
 
-  get debugInfo () {
-    return [
-      { item: 'Pixel Ratio', value: this.S },
-      { item: 'Branches', value: this.branches.length },
-      { item: 'Branches Complete', value: this.allBranchesComplete },
-      { item: 'Decaying', value: this.decaying },
-      { item: 'Fruit', value: this.fruit.length },
-      { item: 'Fruit Complete', value: this.allFruitComplete }
-    ]
-  }
+			this.debugInfo.forEach((d,i) => {
+				c.fillText(`${d.item}: ${d.value}`,textX,24 * (i + 1));
+			});
+		}
 
-  get lastGeneration () {
-    const genIntegers = this.branches.map(b => b.generation)
-    return [...new Set(genIntegers)].pop()
-  }
+		// branches
+		branches.forEach(b => {
+			c.lineWidth = b.diameter;
+			c.beginPath();
+			c.moveTo(b.x1,b.y1);
+			c.lineTo(
+				b.x1 + (b.x2 - b.x1) * b.progress,
+				b.y1 + (b.y2 - b.y1) * b.progress
+			);
+			c.stroke();
+			c.closePath();
+		});
 
-  get trunk () {
-    return {
-      angle: 0,
-      angleInc: 30,
-      decaySpeed: 0.0325,
-      diameter: 3,
-      distance: 14,
-      distanceFade: 0.2,
-      generation: 2,
-      growthSpeed: 0.05,
-      hadBranches: false,
-      progress: 1,
-      x1: 50,
-      y1: 100,
-      x2: 50,
-      y2: 80
-    }
-  }
+		// fruit
+		fruit.forEach(f => {
+			c.globalAlpha = f.decayTime	< f.decayFrames ? f.decayTime / f.decayFrames : 1;
+			c.beginPath();
+			c.arc(f.x,f.y,f.r * f.progress,0,2 * Math.PI);
+			c.fill();
+			c.closePath();
+			c.globalAlpha = 1;
+		});
+	}
+	grow() {
+		// start with the trunk
+		if (!this.branches.length && Utils.dateValue - this.loopEnd > this.loopDelay) {
+			this.branches.push(this.trunk);
+		}
 
-  detectTheme (mq) {
-    this.darkTheme = mq.matches
-  }
+		if (!this.allBranchesComplete) {
+			this.branches.forEach(b => {
+				if (b.progress < 1) {
+					// branch growth
+					b.progress += b.growthSpeed;
 
-  draw () {
-    const { c, W, H, branches, fruit } = this
+					if (b.progress > 1) {
+						b.progress = 1;
 
-    c.clearRect(0, 0, W, H)
+						// grow fruit if the generation is the last
+						if (b.generation === this.maxGenerations) {
+							this.fruit.push({
+								decayFrames: 18,
+								decayTime: 250,
+								progress: 0,
+								speed: 0.04,
+								timeUntilFall: Utils.randomInt(0,300),
+								x: b.x2,
+								y: b.y2,
+								r: Utils.randomInt(4,6),
+								restitution: .1 * (1 - b.y2 / this.floorY),
+								yVelocity: 0
+							});
+						}
+					}
 
-    const foreground = 'hsl(165, 69%, 55%)'
-    c.fillStyle = foreground
-    c.strokeStyle = foreground
+				} else if (!b.hadBranches && b.generation < this.maxGenerations) {
+					b.hadBranches = true;
+					// create two new branches
+					const lean = 5;
+					const angleLeft = b.angle - (b.angleInc + Utils.randomInt(-lean,lean));
+					const angleRight = b.angle + (b.angleInc + Utils.randomInt(-lean,lean));
+					const distance = b.distance * (1 - b.distanceFade);
+					const generation = b.generation + 1;
 
-    // branches
-    branches.forEach(b => {
-      c.lineWidth = b.diameter
-      c.beginPath()
-      c.moveTo(b.x1, b.y1)
-      c.lineTo(
-        b.x1 + (b.x2 - b.x1) * b.progress,
-        b.y1 + (b.y2 - b.y1) * b.progress
-      )
-      c.stroke()
-      c.closePath()
-    })
+					const leftBranch = {
+						angle: angleLeft,
+						angleInc: b.angleInc,
+						decaySpeed: b.decaySpeed,
+						diameter: Math.floor(b.diameter * 0.9),
+						distance,
+						distanceFade: b.distanceFade,
+						generation,
+						growthSpeed: b.growthSpeed,
+						hadBranches: false,
+						progress: 0,
+						x1: b.x2,
+						y1: b.y2,
+						x2: b.x2 + Utils.endPointX(angleLeft,distance),
+						y2: b.y2 - Utils.endPointY(angleLeft,distance)
+					};
 
-    // fruit
-    fruit.forEach(f => {
-      c.globalAlpha = f.decayTime	< f.decayFrames ? f.decayTime / f.decayFrames : 1
-      c.beginPath()
-      c.arc(f.x, f.y, f.r * f.progress, 0, 1 * Math.PI)
-      c.fill()
-      c.closePath()
-      c.globalAlpha = 1
-    })
-  }
+					const rightBranch = {...leftBranch};
+					rightBranch.angle = angleRight;
+					rightBranch.x2 = b.x2 + Utils.endPointX(angleRight,distance);
+					rightBranch.y2 = b.y2 - Utils.endPointY(angleRight,distance);
 
-  grow () {
-    // start with the trunk
-    if (!this.branches.length && Utils.dateValue - this.loopEnd > this.loopDelay) {
-      this.branches.push(this.trunk)
-    }
+					this.branches.push(leftBranch,rightBranch);
+				}
+			});
+		}
+		if (!this.allFruitComplete) {
+			this.fruit.forEach(f => {
+				if (f.progress < 1) {
+					f.progress += f.speed;
 
-    if (!this.allBranchesComplete) {
-      this.branches.forEach(b => {
-        if (b.progress < 1) {
-          // branch growth
-          b.progress += b.growthSpeed
+					if (f.progress > 1) f.progress = 1;
+				}
+			});
+		}
 
-          if (b.progress > 1) {
-            b.progress = 1
+		if (this.allBranchesComplete && this.allFruitComplete) this.decaying = true;
+	}
+	decay() {
+		if (this.fruit.length) {
+			// fruit fall
+			this.fruit = this.fruit.filter(f => f.decayTime > 0);
 
-            // grow fruit if the generation is the last
-            if (b.generation === this.maxGenerations) {
-              this.fruit.push({
-                decayFrames: 18,
-                decayTime: 150,
-                progress: 0,
-                speed: 0.04,
-                timeUntilFall: Utils.randomInt(0, 300),
-                x: b.x2,
-                y: b.y2,
-                r: Utils.randomInt(4, 6),
-                restitution: 0.2 * (1 - b.y2 / this.floorY),
-                yVelocity: 0
-              })
-            }
-          }
-        } else if (!b.hadBranches && b.generation < this.maxGenerations) {
-          b.hadBranches = true
-          // create two new branches
-          const lean = 5
-          const angleLeft = b.angle - (b.angleInc + Utils.randomInt(-lean, lean))
-          const angleRight = b.angle + (b.angleInc + Utils.randomInt(-lean, lean))
-          const distance = b.distance * (1 - b.distanceFade)
-          const generation = b.generation + 1
+			this.fruit.forEach(f => {
+				if (f.timeUntilFall <= 0) {
+					f.y += f.yVelocity;
+					f.yVelocity += this.gravity;
 
-          const leftBranch = {
-            angle: angleLeft,
-            angleInc: b.angleInc,
-            decaySpeed: b.decaySpeed,
-            diameter: Math.floor(b.diameter * 0.9),
-            distance,
-            distanceFade: b.distanceFade,
-            generation,
-            growthSpeed: b.growthSpeed,
-            hadBranches: false,
-            progress: 0,
-            x1: b.x2,
-            y1: b.y2,
-            x2: b.x2 + Utils.endPointX(angleLeft, distance),
-            y2: b.y2 - Utils.endPointY(angleLeft, distance)
-          }
+					const bottom = this.floorY ;
 
-          const rightBranch = { ...leftBranch }
-          rightBranch.angle = angleRight
-          rightBranch.x2 = b.x2 + Utils.endPointX(angleRight, distance)
-          rightBranch.y2 = b.y2 - Utils.endPointY(angleRight, distance)
+					if (f.y >= bottom) {
+						f.y = bottom;
+						f.yVelocity *= -f.restitution;
+					}
 
-          this.branches.push(leftBranch, rightBranch)
-        }
-      })
-    }
-    if (!this.allFruitComplete) {
-      this.fruit.forEach(f => {
-        if (f.progress < 1) {
-          f.progress += f.speed
+					--f.decayTime;
 
-          if (f.progress > 1) f.progress = 1
-        }
-      })
-    }
+				} else if (!f.decaying) {
+					--f.timeUntilFall;
+				}
+			});
+		}
+		if (this.allFruitFalling || !this.fruit.length) {
+			// branch decay
+			this.branches = this.branches.filter(b => b.progress > 0);
 
-    if (this.allBranchesComplete && this.allFruitComplete) this.decaying = true
-  }
+			this.branches.forEach(b => {
+				if (b.generation === this.lastGeneration) b.progress -= b.decaySpeed;
+			});
+		}
+		if (!this.branches.length && !this.fruit.length) {
+			// back to the trunk
+			this.decaying = false;
+			this.loopEnd = Utils.dateValue;
+		}
+	}
+	init() {
+		this.setupCanvas();
+		this.setupThemeDetection();
+		this.run();
+	}
+	run() {
+		this.draw();
 
-  decay () {
-    if (this.fruit.length) {
-      // fruit fall
-      this.fruit = this.fruit.filter(f => f.decayTime > 0)
+		if (this.decaying) this.decay();
+		else this.grow();
 
-      this.fruit.forEach(f => {
-        if (f.timeUntilFall <= 0) {
-          f.y += f.yVelocity
-          f.yVelocity += this.gravity
+		requestAnimationFrame(this.run.bind(this));
+	}
+	setupCanvas() {
+		const { C, c, W, H, S } = this;
 
-          const bottom = this.floorY - f.r
+		// properly scale the canvas based on the pixel ratio
+		C.width = W * S;
+		C.height = H * S;
+		C.style.width = "190px";
+		C.style.height = "120%";
+		c.scale(S,S);
 
-          if (f.y >= bottom) {
-            f.y = bottom
-            f.yVelocity *= -f.restitution
-          }
-
-          --f.decayTime
-        } else if (!f.decaying) {
-          --f.timeUntilFall
-        }
-      })
-    }
-    if (this.allFruitFalling || !this.fruit.length) {
-      // branch decay
-      this.branches = this.branches.filter(b => b.progress > 0)
-
-      this.branches.forEach(b => {
-        if (b.generation === this.lastGeneration) b.progress -= b.decaySpeed
-      })
-    }
-    if (!this.branches.length && !this.fruit.length) {
-      // back to the trunk
-      this.decaying = false
-      this.loopEnd = Utils.dateValue
-    }
-  }
-
-  init () {
-    this.setupCanvas()
-    this.setupThemeDetection()
-    this.run()
-  }
-
-  run () {
-    this.draw()
-
-    if (this.decaying) this.decay()
-    else this.grow()
-
-    requestAnimationFrame(this.run.bind(this))
-  }
-
-  setupCanvas () {
-    const { C, c, W, H, S } = this
-
-    // properly scale the canvas based on the pixel ratio
-    C.width = W * S
-    C.height = H * S
-    C.style.width = ''
-    C.style.height = '100%'
-    c.scale(S, S)
-
-    // set unchanging styles
-    c.font = '1px sans-serif'
-    c.lineCap = 'round'
-    c.lineJoin = 'round'
-  }
-
-  setupThemeDetection () {
-    if (window.matchMedia) {
-      const mq = window.matchMedia('(prefers-color-scheme: dark)')
-      this.detectTheme(mq)
-      mq.addListener(this.detectTheme.bind(this))
-    }
-  }
+		// set unchanging styles
+		c.font = "16px sans-serif";
+		c.lineCap = "round";
+		c.lineJoin = "round";
+	}
+	setupThemeDetection() {
+		if (window.matchMedia) {
+			const mq = window.matchMedia("(prefers-color-scheme: dark)");
+			this.detectTheme(mq);
+			mq.addListener(this.detectTheme.bind(this));
+		}
+	}
 }
 
 class Utils {
-  static get dateValue () {
-    return +new Date()
-  }
-
-  static endPointX (angleInDeg, distance) {
-    return Math.sin(angleInDeg * Math.PI / 180) * distance
-  }
-
-  static endPointY (angleInDeg, distance) {
-    return Math.cos(angleInDeg * Math.PI / 180) * distance
-  }
-
-  static randomInt (min, max) {
-    return min + Math.round(Math.random() * (max - min))
-  }
+	static get dateValue() {
+		return +new Date();
+	}
+	static endPointX(angleInDeg,distance) {
+		return Math.sin(angleInDeg * Math.PI / 180) * distance;
+	}
+	static endPointY(angleInDeg,distance) {
+		return Math.cos(angleInDeg * Math.PI / 180) * distance;
+	}
+	static randomInt(min,max) {
+		return min + Math.round(Math.random() * (max - min));
+	}
 }
 
 /* =============== CLOCK =============== */
@@ -395,8 +389,10 @@ fetch('https://type.fit/api/quotes')
       randomQuote = data[randomIndex]
       text = randomQuote.text
     }
-    const author = randomQuote.author
+    const author = randomQuote.author+" "
+    console.log(author)
     const q = author.split(' ')
+    console.log(q[0],q[1])
     document.getElementById('quoteText').innerHTML = text
     document.getElementById('quoteAuthor').innerHTML = '- ' + `<a href="https://www.google.com/search?q=${q[0]}+${q[1]}" target="_blank">${author}</a>`
   })
@@ -471,4 +467,9 @@ function isValidURL (url) {
 								 '(\\#[-a-z\\d_]*)?$', 'i') // fragment locator
 
   return urlPattern.test(url)
+}
+
+function openNewTab() {
+	const newTab = window.open('', '_blank');
+	newTab.focus();
 }
