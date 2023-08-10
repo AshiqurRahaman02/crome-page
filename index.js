@@ -447,7 +447,6 @@ searchInput.addEventListener('change', (e) => {
 
   if (url && isValidURL(url)) {
     window.open(url, '_blank')
-    console.log(true)
   } else
   if (url) {
     url = url.trim().split(' ').join('+')

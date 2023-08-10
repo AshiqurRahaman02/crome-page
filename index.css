@@ -453,15 +453,20 @@ body {
 #about img{
   width: 100%;
   border-radius: 50%;
+  aspect-ratio: 3/3;
+  object-fit: contain;
 }
-#about>a:nth-child(3)>img{
+#about>a:nth-child(2)>img{
   background-color: #ffffff;
-  padding: 2px;
 }
 #about>a:nth-child(4)>img{
   background-color: #ffffff;
   padding: 2px;
-}#about>a:nth-child(7)>img{
+}
+#about>a:nth-child(5)>img{
+  background-color: #ffffff;
+  padding: 2px;
+}#about>a:nth-child(8)>img{
   width: 130%;
   margin-top:-7px;
   margin-left:-3.5px;
