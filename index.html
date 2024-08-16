@@ -1,199 +1,144 @@
 <!-- eslint-disable @html-eslint/no-multiple-h1 -->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to Crome</title>
-        <link  rel="icon" href="./images/Chrome.png" type="image/x-icon">
-        <link rel="stylesheet" href="./index.css">
-        <link href="https://fonts.googleapis.com/css?family=Baloo+2:400,800&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div id="hello">
-            <div>
-                <h1 id="greeting">Good Morning</h1>
-                <h1>Ashik</h1>
-            </div>
-            <img src="./images/hello-unscreen.gif" alt="">
-        </div>
-        <div id="status">
-            <div >
-                <h1>How are you feeling now ?</h1>
-                <div>
-                    <p>Happy &#128512;</p>
-                    <p>Normal &#128528;</p>
-                    <p>Sad &#128532;</p>
-                </div>
-            </div>
-            <canvas role="img" aria-label="A tree growing until it bears fruit, dropping its fruit, shrinking, and repeating the cycle"></canvas>
-        </div>
-        <div id="clock" class="container">
-            <div class="clock__circle">
-                <div class="clock__rounder"></div>
-                <div class="clock__hour" id="clock-hour"></div>
-                <div class="clock__minutes" id="clock-minutes"></div>
-                <div class="clock__sec" id="clock-sec"></div>
-            </div>
-        
-            <div>
-                <div class="clock__date">
-                    <span class="clock__day-week" id="date-day-week"></span>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Welcome to Crome</title>
+		<link rel="icon" href="./images/Chrome.png" type="image/x-icon" />
+		<link rel="stylesheet" href="./index.css" />
+		<link
+			href="https://fonts.googleapis.com/css?family=Baloo+2:400,800&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<div id="hello">
+			<div>
+				<h1 id="greeting">Good Morning</h1>
+				<h1>Ashik</h1>
+			</div>
+			<img src="./images/hello-unscreen.gif" alt="" />
+		</div>
+		<div id="status">
+			<div>
+				<h1>How are you feeling ?</h1>
+				<div>
+					<p>Happy &#128512;</p>
+					<p>Normal &#128528;</p>
+					<p>Sad &#128532;</p>
+				</div>
+			</div>
+			<canvas
+				role="img"
+				aria-label="A tree growing until it bears fruit, dropping its fruit, shrinking, and repeating the cycle"
+			></canvas>
+		</div>
+		<div id="clock" class="container">
+			<div class="clock__circle">
+				<div class="clock__rounder"></div>
+				<div class="clock__hour" id="clock-hour"></div>
+				<div class="clock__minutes" id="clock-minutes"></div>
+				<div class="clock__sec" id="clock-sec"></div>
+			</div>
 
-                    <div>
-                        <span class="clock__month" id="date-month"></span>
-                        <span class="clock__day" id="date-day"></span>
-                        <span class="clock__year" id="date-year"></span>
-                    </div>
-                </div>
-                <hr id="between">
-                <div class="clock__text">
-                    <span class="clock__text-hour" id="text-hour"></span>
-                    <span class="clock__text-minutes" id="text-minutes"></span>
-                    <span class="clock__text-ampm" id="text-ampm"></span>
-                    <span id="temperature"class="clock__text-hour"></span>
-                </div>
-            </div>
-            <div>
-                <img src="" alt="" id="weatherImg">
-            </div>
-        </div>
-        <div id="gmail">
-            <h2>
-                Don't forget <br> to check
-            </h2>
-            <a href="https://mail.google.com/mail/u/0/#inbox" id="links" target="_blank">
-                <img src="./images/gmail.svg" alt="gmail">
-                <h3>Gmail</h3>
-            </a>
-        </div>
-        <div id="quote">
-            <p id="quoteText">Eliminate distraction, you'll get whatever you want.</p>
-            <p id="quoteAuthor">- Ashik</p>
-        </div>
-        <main id="link">
-            <a href="https://www.youtube.com/" id="links" target="_blank">
-                <img src="./images/youtube.svg" alt="YouTube">
-                <h3>YouTube</h3>
-            </a>
-            <a href="https://www.linkedin.com/feed/" id="links" target="_blank">
-                <img src="./images/linkedin.svg" alt="Linkedin">
-                <h3>Linkedin</h3>
-            </a>
-            <a href="https://github.com/" id="links" target="_blank">
-                <img src="./images/github-icon-1-logo-svgrepo-com.svg" alt="GitHub">
-                <h3>GitHub</h3>
-            </a>
-            <a href="https://leetcode.com/problemset/all/" id="links" target="_blank">
-                <img src="./images/leetcode.svg" alt="Leetcode">
-                <h3>Leetcode</h3>
-            </a>
-            <a href="https://oj.masaischool.com/problem" id="links" target="_blank">
-                <img src="./images/oj.ico" alt="Oj Masai">
-                <h3>Oj Masai</h3>
-            </a>
-            <a href="https://codepen.io/following" id="links" target="_blank">
-                <img src="./images/codepen-icon.svg" alt="Codepen">
-                <h3>Codepen</h3>
-            </a>
-            <a href="https://students.masaischool.com/" id="links" target="_blank">
-                <img src="./images/masai.png" alt="Masai">
-                <h3>Masai </h3>
-            </a><a href="https://slack.com/intl/en-in/" id="links" target="_blank">
-                <img src="./images/slack.svg" alt="Slack">
-                <h3>Slack</h3>
-            </a><a href="https://chat.openai.com/" id="links" target="_blank">
-                <img src="./images/ChatGPT_logo.svg.png" alt="ChatGPT">
-                <h3>ChatGPT</h3>
-            </a>
-        </main>
-        <div id="todolist">
-            <h2>Reminder</h2>
-            <div id="lists">
-                <h3>
-                    <span>Drink Water</span>
-                    <span>Done</span>
-                </h3>
-            </div>
-            <h2>Daily Todo List</h2>
-            <div id="lists">
-                <h3>
-                    <span>git push</span>
-                    <span>Done</span>
-                </h3>
-                <h3>
-                    <span>30 min Zoom</span>
-                    <span>Done</span>
-                </h3>
-                <h3>
-                    <span>2 leetcode</span>
-                    <span>Done</span>
-                </h3>
-                <h3>
-                    <span>15 min Book</span>
-                    <span>Done</span>
-                </h3>
-                <h3>
-                    <span>Assignment</span>
-                    <span>Done</span>
-                </h3>
-                <h3>
-                    <span>Exercise</span>
-                    <span>Done</span>
-                </h3>
-            </div>
-        </div>
-        <div id="search">
-            <img src="./images/google.svg" alt="">
-            <input type="search" placeholder="Search Google or type a URL">
-        </div>
-        <div id="spotify">
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5fyAKhKeAq639tg6NUmBY4?utm_source=generator" width="100%" height="100%" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" ></iframe>
-        </div>
-        <div id="about">
-            <a href="https://ashiqurrahaman02.github.io/" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/ashik.png" alt="">
-            </a>
-            <a href="https://code-path-prep.vercel.app/" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/codepath-logo.png" alt="">
-            </a>
-            <a href="https://skilcraft.netlify.app/" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/skilcraft-logo.jpg" alt="">
-            </a>
-            <a href="https://sava-india.netlify.app/" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/sava.png" alt="">
-            </a>
-            <a href="https://textmate-india.netlify.app/" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/textmate.png" alt="">
-            </a>
-            <a href="https://tranquil-pegasus-5a340e.netlify.app/index.html" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/snapdeal.png" alt="">
-            </a>
-            <a href="https://dashing-hummingbird-6ae958.netlify.app/" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/mamababy.png" alt="">
-            </a>
-            <a href="https://www.hackerrank.com/dashboard" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/hackerrank.svg" alt="">
-            </a>
-            <a href="https://excalidraw.com/" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="https://excalidraw.com/favicon.ico" alt="">
-            </a>
-            <a href="https://web.whatsapp.com" target="_blank">
-                <ion-icon name="open-outline"></ion-icon>
-                <img src="./images/whatsapp.png" alt="">
-            </a>
-        </div>
-    </body>
+			<div>
+				<div class="clock__date">
+					<span class="clock__day-week" id="date-day-week"></span>
+
+					<div>
+						<span class="clock__month" id="date-month"></span>
+						<span class="clock__day" id="date-day"></span>
+						<span class="clock__year" id="date-year"></span>
+					</div>
+				</div>
+				<hr id="between" />
+				<div class="clock__text">
+					<span class="clock__text-hour" id="text-hour"></span>
+					<span class="clock__text-minutes" id="text-minutes"></span>
+					<span class="clock__text-ampm" id="text-ampm"></span>
+					<span id="temperature" class="clock__text-hour"></span>
+				</div>
+			</div>
+			<div>
+				<img src="" alt="" id="weatherImg" />
+			</div>
+		</div>
+		<div id="gmail">
+			<h2>
+				Don't forget <br />
+				to check
+			</h2>
+			<a
+				href="https://mail.google.com/mail/u/0/#inbox"
+				id="link"
+				target="_blank"
+			>
+				<img src="./images/gmail.svg" alt="gmail" />
+				<h3>Gmail</h3>
+			</a>
+		</div>
+		<div id="quote">
+			<p id="quoteText">
+				Eliminate distraction, you'll get whatever you want.
+			</p>
+			<p id="quoteAuthor">- Ashik</p>
+		</div>
+		<main id="primary"></main>
+		<div id="todolist">
+			<h2>Reminder</h2>
+			<div id="lists">
+				<h3>
+					<span>Drink Water</span>
+					<span>Done</span>
+				</h3>
+			</div>
+			<h2>Daily Todo List</h2>
+			<div id="lists">
+				<h3>
+					<span>git push</span>
+					<span>Done</span>
+				</h3>
+				<h3>
+					<span>30 min Zoom</span>
+					<span>Done</span>
+				</h3>
+				<h3>
+					<span>2 leetcode</span>
+					<span>Done</span>
+				</h3>
+				<h3>
+					<span>15 min Book</span>
+					<span>Done</span>
+				</h3>
+				<h3>
+					<span>Assignment</span>
+					<span>Done</span>
+				</h3>
+				<h3>
+					<span>Exercise</span>
+					<span>Done</span>
+				</h3>
+			</div>
+		</div>
+		<div id="search">
+			<img src="./images/google.svg" alt="" />
+			<input type="search" placeholder="Search Google or type a URL" />
+		</div>
+		<div id="spotify">
+			<iframe
+				style="border-radius: 12px"
+				src="https://open.spotify.com/embed/playlist/5fyAKhKeAq639tg6NUmBY4?utm_source=generator"
+				width="100%"
+				height="100%"
+				frameborder="0"
+				allowfullscreen=""
+				allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+				loading="lazy"
+			></iframe>
+		</div>
+		<div id="secondary"></div>
+	</body>
 </html>
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script src="./index.js"></script>
