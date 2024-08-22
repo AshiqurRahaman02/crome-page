@@ -94,6 +94,7 @@ main > a {
 	overflow: auto;
 	max-height: 50.4vh;
 	overflow-y: scroll;
+	background-color: rgb(127, 255, 212);
 }
 #search {
 	grid-column-start: 15;

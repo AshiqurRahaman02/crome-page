@@ -593,7 +593,7 @@ const secondaryLinks = [
 	},
 	{
 		id: 3,
-		href: "https://skilcraft.netlify.app/",
+		href: "https://skill-craft.netlify.app/",
 		imgSrc: "./images/skilcraft-logo.jpg",
 		alt: "Skilcraft",
 	},
@@ -639,6 +639,12 @@ const secondaryLinks = [
 		imgSrc: "./images/whatsapp.png",
 		alt: "WhatsApp",
 	},
+	{
+		id: 11,
+		href: "https://web.telegram.org/a/",
+		imgSrc: "https://web.telegram.org/a/favicon.svg",
+		alt: "Telegram",
+	},
 ];
 
 const secondaryContainer = document.getElementById("secondary");
@@ -672,3 +678,7 @@ window.addEventListener("keydown", (event) => {
 		}
 	}
 });
+
+// const todoList = document.getElementById("todolist");
+
+// todoList.innerHTML = `<iframe src="http://localhost:3000/todolist/iframe" title="My Iframe Content" width="370px"></iframe>`
