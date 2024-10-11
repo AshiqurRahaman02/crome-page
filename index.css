@@ -470,18 +470,14 @@ body {
 	aspect-ratio: 3/3;
 	object-fit: contain;
 }
-#secondary > a:nth-child(2) > img {
+#secondary  .CodePath {
 	background-color: #ffffff;
 }
-#secondary > a:nth-child(4) > img {
-	background-color: #ffffff;
-	padding: 2px;
-}
-#secondary > a:nth-child(5) > img {
+#secondary .Sava {
 	background-color: #ffffff;
 	padding: 2px;
 }
-#secondary > a:nth-child(8) > img {
+#secondary .HackerRank {
 	width: 130%;
 	margin-top: -7px;
 	margin-left: -3.5px;

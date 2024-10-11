@@ -587,63 +587,69 @@ const secondaryLinks = [
 	},
 	{
 		id: 2,
-		href: "https://code-path-prep.vercel.app/",
-		imgSrc: "./images/codepath-logo.png",
-		alt: "CodePath",
-	},
-	{
-		id: 3,
-		href: "https://skill-craft.netlify.app/",
-		imgSrc: "./images/skilcraft-logo.jpg",
-		alt: "Skilcraft",
-	},
-	{
-		id: 4,
-		href: "https://sava-india.netlify.app/",
-		imgSrc: "./images/sava.png",
-		alt: "Sava India",
-	},
-	{
-		id: 5,
-		href: "https://textmate-india.netlify.app/",
-		imgSrc: "./images/textmate.png",
-		alt: "Textmate",
-	},
-	{
-		id: 6,
-		href: "https://tranquil-pegasus-5a340e.netlify.app/index.html",
-		imgSrc: "./images/snapdeal.png",
-		alt: "Snapdeal",
-	},
-	{
-		id: 7,
-		href: "https://dashing-hummingbird-6ae958.netlify.app/",
-		imgSrc: "./images/mamababy.png",
-		alt: "MamaBaby",
-	},
-	{
-		id: 8,
-		href: "https://www.hackerrank.com/dashboard",
-		imgSrc: "./images/hackerrank.svg",
-		alt: "HackerRank",
-	},
-	{
-		id: 9,
 		href: "https://excalidraw.com/",
 		imgSrc: "https://excalidraw.com/favicon.ico",
 		alt: "Excalidraw",
 	},
 	{
-		id: 10,
+		id: 3,
 		href: "https://web.whatsapp.com",
 		imgSrc: "./images/whatsapp.png",
 		alt: "WhatsApp",
 	},
 	{
-		id: 11,
+		id: 4,
 		href: "https://web.telegram.org/a/",
 		imgSrc: "https://web.telegram.org/a/favicon.svg",
 		alt: "Telegram",
+	},
+	{
+		id: 5,
+		href: "https://app.clickup.com/9016531631/home",
+		imgSrc: "https://app-cdn.clickup.com/favicon-32x32.2ff057acd7b1fa8ebcbfd22667a640b9.png",
+		alt: "Click Up",
+	},
+	{
+		id: 6,
+		href: "https://www.hackerrank.com/dashboard",
+		imgSrc: "./images/hackerrank.svg",
+		alt: "HackerRank",
+	},
+	{
+		id: 7,
+		href: "https://code-path-prep.vercel.app/",
+		imgSrc: "./images/codepath-logo.png",
+		alt: "CodePath",
+	},
+	{
+		id: 8,
+		href: "https://skill-craft.netlify.app/",
+		imgSrc: "./images/skilcraft-logo.jpg",
+		alt: "Skilcraft",
+	},
+	{
+		id: 9,
+		href: "https://sava-india.netlify.app/",
+		imgSrc: "./images/sava.png",
+		alt: "Sava India",
+	},
+	{
+		id: 10,
+		href: "https://textmate-india.netlify.app/",
+		imgSrc: "./images/textmate.png",
+		alt: "Textmate",
+	},
+	{
+		id: 11,
+		href: "https://tranquil-pegasus-5a340e.netlify.app/index.html",
+		imgSrc: "./images/snapdeal.png",
+		alt: "Snapdeal",
+	},
+	{
+		id: 12,
+		href: "https://dashing-hummingbird-6ae958.netlify.app/",
+		imgSrc: "./images/mamababy.png",
+		alt: "MamaBaby",
 	},
 ];
 
@@ -654,7 +660,7 @@ secondaryLinks.forEach((link) => {
 	secondaryHtml += `
         <a href="${link.href}" target="_blank" title="${link.alt}">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff88"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg>
-            <img src="${link.imgSrc}" alt="${link.alt}">
+            <img src="${link.imgSrc}" alt="${link.alt}" class="${link.alt}">
         </a>`;
 });
 
