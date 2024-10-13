@@ -104,7 +104,7 @@ main > a {
 
 	display: flex;
 }
-#spotify {
+#timer-container {
 	grid-column-start: 15;
 	grid-column-end: 20;
 	grid-row-start: 21;
@@ -285,7 +285,7 @@ body {
 	transform-origin: bottom;
 }
 
-.clock__circle+div{
+.clock__circle + div {
 	display: flex;
 	flex-direction: column;
 	gap: 3px;
@@ -451,6 +451,62 @@ body {
 	text-decoration-color: #00ff95;
 }
 
+#timer-container {
+	display: flex;
+	gap: 5px;
+
+	/* border: 2px solid rgb(95, 95, 95); */
+	/* border-radius: 10px; */
+	/* background-color: rgba(130, 130, 130, 0); */
+	/* backdrop-filter: blur(1px); */
+}
+#timer-container > div {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.timer-button {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 3px;
+	font-size: 1.2em;
+	cursor: pointer;
+	transition: background-color 0.3s;
+
+	border: 2px solid rgb(95, 95, 95);
+	border-radius: 10px;
+	background-color: rgba(130, 130, 130, 0);
+	backdrop-filter: blur(1px);
+}
+.timer-button > span:nth-child(2) {
+	position: absolute;
+	right: 5px;
+	font-size: 33px;
+	font-weight: 600;
+	font-family: "Baloo 2", cursive;
+	background: -webkit-linear-gradient(45deg, #abfcff, #00ff95 80%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.timer-button:hover {
+	background-color: rgba(130, 130, 130, 0.377);
+}
+
+.timer-controls {
+	display: flex;
+	gap: 0px;
+}
+
+.timer-icon {
+	font-size: 1.5em;
+	cursor: pointer;
+}
+
 #search > img {
 	width: 6%;
 	margin-left: 1%;
@@ -470,7 +526,7 @@ body {
 	aspect-ratio: 3/3;
 	object-fit: contain;
 }
-#secondary  .CodePath {
+#secondary .CodePath {
 	background-color: #ffffff;
 }
 #secondary .Sava {

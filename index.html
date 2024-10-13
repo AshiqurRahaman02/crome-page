@@ -87,47 +87,18 @@
 		</div>
 		<main id="primary"></main>
 		<div id="todolist">
-			<iframe src="https://omni-plex.vercel.app/todolist/iframe" title="Omniplex Iframe Content" height="380px" style="border: 0px; width: 100%;"></iframe>
-			<!-- <h2>Reminder</h2>
-			<div id="lists">
-				<h3>
-					<span>Drink Water</span>
-					<span>Done</span>
-				</h3>
-			</div>
-			<h2>Daily Todo List</h2>
-			<div id="lists">
-				<h3>
-					<span>git push</span>
-					<span>Done</span>
-				</h3>
-				<h3>
-					<span>30 min Zoom</span>
-					<span>Done</span>
-				</h3>
-				<h3>
-					<span>2 leetcode</span>
-					<span>Done</span>
-				</h3>
-				<h3>
-					<span>15 min Book</span>
-					<span>Done</span>
-				</h3>
-				<h3>
-					<span>Assignment</span>
-					<span>Done</span>
-				</h3>
-				<h3>
-					<span>Exercise</span>
-					<span>Done</span>
-				</h3>
-			</div> -->
+			<!-- <iframe
+				src="https://omni-plex.vercel.app/todolist/iframe"
+				title="Omniplex Iframe Content"
+				height="380px"
+				style="border: 0px; width: 100%"
+			></iframe> -->
 		</div>
 		<div id="search">
 			<img src="./images/google.svg" alt="" />
 			<input type="search" placeholder="Search Google or type a URL" />
 		</div>
-		<div id="spotify">
+		<!-- <div id="spotify">
 			<iframe
 				style="border-radius: 12px"
 				src="https://open.spotify.com/embed/playlist/5fyAKhKeAq639tg6NUmBY4?utm_source=generator"
@@ -138,6 +109,64 @@
 				allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
 				loading="lazy"
 			></iframe>
+		</div> -->
+		<div id="timer-container">
+			<div>
+				<div
+					class="timer-button"
+					data-time="1500"
+					onclick="toggleTimer(this)"
+				>
+					<div class="timer-controls">
+						<span class="timer-icon play-icon" title="Play timer"
+							>▶️</span
+						>
+						<span
+							class="timer-icon reset-icon"
+							title="Reset timer"
+							onclick="resetTimer(event, this)"
+							>🔄</span
+						>
+					</div>
+					<span class="timer-label">25:00</span>
+				</div>
+				<div
+					class="timer-button"
+					data-time="2700"
+					onclick="toggleTimer(this)"
+				>
+					<div class="timer-controls">
+						<span class="timer-icon play-icon" title="Play timer"
+							>▶️</span
+						>
+						<span
+							class="timer-icon reset-icon"
+							title="Reset timer"
+							onclick="resetTimer(event, this)"
+							>🔄</span
+						>
+					</div>
+					<span class="timer-label">45:00</span>
+				</div>
+				<div
+					class="timer-button"
+					data-time="3600"
+					onclick="toggleTimer(this)"
+				>
+					<div class="timer-controls">
+						<span class="timer-icon play-icon" title="Play timer"
+							>▶️</span
+						>
+						<span
+							class="timer-icon reset-icon"
+							title="Reset timer"
+							onclick="resetTimer(event, this)"
+							>🔄</span
+						>
+					</div>
+					<span class="timer-label">60:00</span>
+				</div>
+			</div>
 		</div>
 		<div id="secondary"></div>
 	</body>

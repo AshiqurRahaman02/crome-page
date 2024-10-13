@@ -409,19 +409,11 @@ const clockText = () => {
 };
 setInterval(clockText, 1000); // (Updates every 1s) 1000 = 1s
 
-fetch("https://type.fit/api/quotes")
+fetch("https://dummyjson.com/quotes/random")
 	.then((response) => response.json())
 	.then((data) => {
-		let randomIndex = Math.floor(Math.random() * data.length);
-		let randomQuote = data[randomIndex];
-
-		let text = randomQuote.text;
-		while (text.length > 95) {
-			randomIndex = Math.floor(Math.random() * data.length);
-			randomQuote = data[randomIndex];
-			text = randomQuote.text;
-		}
-		const author = randomQuote.author + " ";
+		let text = data.quote;
+		const author = data.author;
 		const q = author.split(" ");
 		document.getElementById("quoteText").innerHTML = text;
 		document.getElementById("quoteAuthor").innerHTML =
@@ -518,7 +510,7 @@ const primaryLinks = [
 	{
 		id: 3,
 		href: "https://github.com/",
-		imgSrc: "./images/github-icon-1-logo-svgrepo-com.svg",
+		imgSrc: "./images/github.svg",
 		alt: "GitHub",
 		name: "GitHub",
 	},
@@ -531,24 +523,24 @@ const primaryLinks = [
 	},
 	{
 		id: 5,
-		href: "https://oj.masaischool.com/problem",
-		imgSrc: "./images/oj.ico",
-		alt: "Oj Masai",
-		name: "Oj Masai",
-	},
-	{
-		id: 6,
 		href: "https://codepen.io/following",
 		imgSrc: "./images/codepen-icon.svg",
 		alt: "Codepen",
 		name: "Codepen",
 	},
 	{
+		id: 6,
+		href: "https://www.figma.com/",
+		imgSrc: "./images/figma.png",
+		alt: "Figma",
+		name: "Figma",
+	},
+	{
 		id: 7,
-		href: "https://students.masaischool.com/",
-		imgSrc: "./images/masai.png",
-		alt: "Masai",
-		name: "Masai",
+		href: "https://www.onenote.com/notebooks?auth=1",
+		imgSrc: "./images/onenote.png",
+		alt: "Onenote",
+		name: "Onenote",
 	},
 	{
 		id: 8,
@@ -606,7 +598,8 @@ const secondaryLinks = [
 	{
 		id: 5,
 		href: "https://app.clickup.com/9016531631/home",
-		imgSrc: "https://app-cdn.clickup.com/favicon-32x32.2ff057acd7b1fa8ebcbfd22667a640b9.png",
+		imgSrc:
+			"https://app-cdn.clickup.com/favicon-32x32.2ff057acd7b1fa8ebcbfd22667a640b9.png",
 		alt: "Click Up",
 	},
 	{
@@ -688,3 +681,85 @@ window.addEventListener("keydown", (event) => {
 // const todoList = document.getElementById("todolist");
 
 // todoList.innerHTML = `<iframe src="http://localhost:3000/todolist/iframe" title="My Iframe Content" width="370px"></iframe>`
+
+const timers = {}; // Object to keep track of each timer's interval and state
+let activeTimerKey = null; // Track currently active timer
+
+function toggleTimer(button) {
+	const label = button.querySelector(".timer-label");
+	const playIcon = button.querySelector(".play-icon");
+	const timeKey = button.dataset.time;
+
+	// Check if another timer is running and stop it
+	if (activeTimerKey && activeTimerKey !== timeKey) {
+		clearInterval(timers[activeTimerKey].interval);
+		const activeButton = document.querySelector(
+			`[data-time="${activeTimerKey}"]`
+		);
+		const activeIcon = activeButton.querySelector(".play-icon");
+		activeIcon.textContent = "▶️";
+		timers[activeTimerKey].isRunning = false;
+	}
+
+	// Toggle the selected timer's state
+	if (timers[timeKey]?.isRunning) {
+		clearInterval(timers[timeKey].interval);
+		timers[timeKey].isRunning = false;
+		playIcon.textContent = "▶️";
+		playIcon.title = "Play timer";
+	} else {
+		if (!timers[timeKey]) {
+			timers[timeKey] = {
+				remainingTime: parseInt(timeKey),
+				isRunning: true,
+			};
+		} else {
+			timers[timeKey].isRunning = true;
+		}
+		playIcon.textContent = "⏸️";
+		playIcon.title = "Pause timer";
+		activeTimerKey = timeKey;
+
+		timers[timeKey].interval = setInterval(() => {
+			if (timers[timeKey].remainingTime > 0) {
+				timers[timeKey].remainingTime--;
+				const minutes = Math.floor(timers[timeKey].remainingTime / 60);
+				const seconds = timers[timeKey].remainingTime % 60;
+				label.textContent = `${minutes
+					.toString()
+					.padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+			} else {
+				clearInterval(timers[timeKey].interval);
+				playIcon.textContent = "▶️";
+				label.textContent = "00:00";
+				timers[timeKey].isRunning = false;
+				activeTimerKey = null;
+			}
+		}, 1000);
+	}
+}
+
+function resetTimer(event, resetIcon) {
+	event.stopPropagation(); // Prevent triggering the toggle on reset
+
+	const button = resetIcon.closest(".timer-button");
+	const label = button.querySelector(".timer-label");
+	const playIcon = button.querySelector(".play-icon");
+	const timeKey = button.dataset.time;
+
+	// Stop the timer if it's running
+	if (timers[timeKey]?.isRunning) {
+		clearInterval(timers[timeKey].interval);
+		timers[timeKey].isRunning = false;
+		activeTimerKey = null;
+	}
+
+	// Reset the timer display and icon
+	timers[timeKey].remainingTime = parseInt(timeKey);
+	playIcon.textContent = "▶️";
+	const minutes = Math.floor(timers[timeKey].remainingTime / 60);
+	const seconds = timers[timeKey].remainingTime % 60;
+	label.textContent = `${minutes.toString().padStart(2, "0")}:${seconds
+		.toString()
+		.padStart(2, "0")}`;
+}
