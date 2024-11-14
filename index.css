@@ -359,6 +359,7 @@ body {
 	display: grid;
 	place-items: center;
 	cursor: pointer;
+	text-decoration: none;
 }
 #link > img {
 	width: 30%;

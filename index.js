@@ -597,10 +597,10 @@ const secondaryLinks = [
 	},
 	{
 		id: 5,
-		href: "https://app.clickup.com/9016531631/home",
+		href: "https://pomofocus.io/",
 		imgSrc:
-			"https://app-cdn.clickup.com/favicon-32x32.2ff057acd7b1fa8ebcbfd22667a640b9.png",
-		alt: "Click Up",
+			"https://pomofocus.io/favicon.ico",
+		alt: "Pomofocus",
 	},
 	{
 		id: 6,
