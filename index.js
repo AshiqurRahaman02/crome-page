@@ -250,7 +250,7 @@ class Tree {
 			});
 		}
 		if (!this.branches.length && !this.fruit.length) {
-			// back to the trunk
+			
 			this.decaying = false;
 			this.loopEnd = Utils.dateValue;
 		}
