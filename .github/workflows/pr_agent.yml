@@ -2,7 +2,7 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, reopened, ready_for_review]
+    types: [opened, reopened]
   issue_comment:
 jobs:
   pr_agent_job:
@@ -23,4 +23,3 @@ jobs:
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "true"
           github_action_config.auto_improve: "false"
-          github_action_config.pr_actions: ["opened", "reopened"]
