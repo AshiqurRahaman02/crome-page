@@ -430,34 +430,60 @@ const temperatureElement = document.getElementById("temperature");
 
 // Replace 'YOUR_API_KEY' with your actual API key from OpenWeatherMap
 const apiKey = "8b908a8f4e3018596a0c6ea121b4bd30";
-const Location = "malda";
+const location = "malda";
 
-const url = `https://api.openweathermap.org/data/2.5/weather?q=${Location}&appid=${apiKey}&units=metric`;
+const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
 
+// Get references to DOM elements
 const weatherImg = document.getElementById("weatherImg");
-fetch(url)
-	.then((response) => response.json())
-	.then((data) => {
-		const weather = data.weather[0].main;
-		// console.log(weather)
-		if (weather === "Clouds") {
-			weatherImg.src = "./images/clouds.png";
-		} else if (weather === "Clear") {
-			weatherImg.src = "./images/clear.png";
-		} else if (weather === "Rain") {
-			weatherImg.src = "./images/rain.png";
-		} else if (weather === "Drizzle") {
-			weatherImg.src = "./images/drizzle.png";
-		} else if (weather === "Mist") {
-			weatherImg.src = "./images/mist.png";
-		}
-		const temperature = data.main.temp;
-		temperatureElement.textContent = `| ${Math.floor(temperature)} °C`;
-	})
-	.catch((error) => {
-		console.log("Error:", error);
-		temperatureElement.textContent = "| 30 °C";
-	});
+
+if (weatherImg && temperatureElement) {
+    fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            const weather = data.weather[0]?.main || "Unknown";
+            const temperature = data.main?.temp || 30; // Default temperature if data is missing
+
+            // Set weather image based on condition
+            switch (weather) {
+                case "Clouds":
+                    weatherImg.src = "./images/clouds.png";
+                    break;
+                case "Clear":
+                    weatherImg.src = "./images/clear.png";
+                    break;
+                case "Rain":
+                    weatherImg.src = "./images/rain.png";
+                    break;
+                case "Drizzle":
+                    weatherImg.src = "./images/drizzle.png";
+                    break;
+                case "Mist":
+                    weatherImg.src = "./images/mist.png";
+                    break;
+                default:
+                    weatherImg.src = "./images/default.png"; // Fallback image
+            }
+
+            // Update temperature text
+            temperatureElement.textContent = `| ${Math.floor(temperature)} °C`;
+        })
+        .catch((error) => {
+            console.error("Error fetching weather data:", error);
+
+            // Fallback values for errors
+            weatherImg.src = "./images/error.png"; // Error image
+            temperatureElement.textContent = "| 30 °C"; // Default temperature
+        });
+} else {
+    console.error("Error: Required DOM elements not found.");
+}
+
 
 const searchInput = document.querySelector("#search>input");
 searchInput.addEventListener("change", (e) => {
