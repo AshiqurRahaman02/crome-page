@@ -430,9 +430,9 @@ const temperatureElement = document.getElementById("temperature");
 
 // Replace 'YOUR_API_KEY' with your actual API key from OpenWeatherMap
 const apiKey = "8b908a8f4e3018596a0c6ea121b4bd30";
-const location = "malda";
+const user_location = "jaipur";
 
-const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+const url = `https://api.openweathermap.org/data/2.5/weather?q=${user_location}&appid=${apiKey}&units=metric`;
 
 // Get references to DOM elements
 const weatherImg = document.getElementById("weatherImg");
@@ -467,7 +467,7 @@ if (weatherImg && temperatureElement) {
                     weatherImg.src = "./images/mist.png";
                     break;
                 default:
-                    weatherImg.src = "./images/default.png"; // Fallback image
+                    weatherImg.src = "./images/clear.png"; 
             }
 
             // Update temperature text
