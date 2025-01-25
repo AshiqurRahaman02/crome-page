@@ -34,7 +34,7 @@ jobs:
           COMMIT_MSG=$(git log -1 --format=%s)
 
           if [[ -z "$EXISTING_PR" ]]; then
-            gh pr create --base uat --head "${{ env.BRANCH_NAME }}" --title "Auto PR: $COMMIT_MSG"
+            gh pr create --base uat --head "${{ env.BRANCH_NAME }}" --title "Auto PR: $COMMIT_MSG" --body "Merging changes from ${{ env.BRANCH_NAME }} to uat"
           else
             echo "PR already exists (#$EXISTING_PR), skipping creation."
           fi
