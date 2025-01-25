@@ -1,0 +1,93 @@
+name: Auto PR Creation
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - uat
+  pull_request:
+    types: [closed]
+
+jobs:
+  create_pr_to_uat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Extract Branch Name
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+      - name: Check for Existing PR to uat
+        id: check_pr
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/${{ github.repository }}/pulls
+          headers: '{"authorization": "token ${{ secrets.GITHUB_TOKEN }}"}'
+
+      - name: Create or Update PR to uat
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING_PR=$(echo '${{ steps.check_pr.outputs.data }}' | jq -r '.[] | select(.head.ref == "${{ env.BRANCH_NAME }}" and .base.ref == "uat") | .number')
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+
+          if [[ -z "$EXISTING_PR" ]]; then
+            gh pr create --base uat --head "${{ env.BRANCH_NAME }}" --title "Auto PR: ${{ env.BRANCH_NAME }} → uat" --body "$COMMIT_MSG"
+          else
+            echo "PR already exists (#$EXISTING_PR), skipping creation."
+          fi
+
+  create_pr_to_main:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'uat'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check for Existing PR to main
+        id: check_main_pr
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/${{ github.repository }}/pulls
+          headers: '{"authorization": "token ${{ secrets.GITHUB_TOKEN }}"}'
+
+      - name: Create PR from uat to main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING_MAIN_PR=$(echo '${{ steps.check_main_pr.outputs.data }}' | jq -r '.[] | select(.head.ref == "uat" and .base.ref == "main") | .number')
+
+          if [[ -z "$EXISTING_MAIN_PR" ]]; then
+            gh pr create --base main --head uat --title "Auto PR: uat → main" --body "Merging changes from uat into main"
+          else
+            echo "PR already exists from uat to main (#$EXISTING_MAIN_PR), skipping creation."
+          fi
+
+  label_and_assign_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label PR Based on Changes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          CHANGED_FILES=$(gh pr view $PR_NUMBER --json files -q '.files[].path')
+          LABELS=""
+
+          if echo "$CHANGED_FILES" | grep -qE '^src/|^lib/'; then
+            LABELS="feature"
+          elif echo "$CHANGED_FILES" | grep -qE '^fix/|^hotfix/'; then
+            LABELS="bugfix"
+          fi
+
+          if [[ -n "$LABELS" ]]; then
+            gh pr edit $PR_NUMBER --add-label "$LABELS"
+          fi
+
+      - name: Assign Reviewers
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          gh pr edit $PR_NUMBER --add-reviewer "team-lead"
