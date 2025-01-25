@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
         run: |
           if [[ -z "$EXISTING_MAIN_PR" ]]; then
-            gh pr create --base main --head uat --title "Auto PR: $PR_TITLE" --body "Merging changes from uat to main"
+            gh pr create --base main --head uat --title "$PR_TITLE" --body "Merging changes from uat to main"
           else
             echo "PR already exists from uat to main (#$EXISTING_MAIN_PR), skipping creation."
           fi
