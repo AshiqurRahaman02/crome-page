@@ -46,6 +46,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Fetch Latest Commit Message from uat
+        env:
+          GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
+        run: |
+          git fetch origin uat
+          LATEST_COMMIT_MSG=$(git log origin/uat -1 --format=%s)  # Get latest commit message from uat
+          echo "LATEST_COMMIT_MSG=$LATEST_COMMIT_MSG" >> $GITHUB_ENV
+
       - name: Check for Existing PR to main
         id: check_main_pr
         env:
@@ -59,7 +67,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
         run: |
           if [[ -z "$EXISTING_MAIN_PR" ]]; then
-            gh pr create --base main --head uat --title "Auto PR: uat → main" --body "Merging changes from uat into main"
+            gh pr create --base main --head uat --title "Auto PR: $LATEST_COMMIT_MSG" --body "Merging changes from uat to main"
           else
             echo "PR already exists from uat to main (#$EXISTING_MAIN_PR), skipping creation."
           fi
