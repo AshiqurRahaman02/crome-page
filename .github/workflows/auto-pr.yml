@@ -23,11 +23,11 @@ jobs:
         uses: octokit/request-action@v2.x
         with:
           route: GET /repos/${{ github.repository }}/pulls
-          headers: '{"authorization": "token ${{ secrets.GITHUB_TOKEN }}"}'
+          headers: '{"authorization": "token ${{ secrets.SECRET_GITHUB_TOKEN }}"}'
 
       - name: Create or Update PR to uat
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
         run: |
           EXISTING_PR=$(echo '${{ steps.check_pr.outputs.data }}' | jq -r '.[] | select(.head.ref == "${{ env.BRANCH_NAME }}" and .base.ref == "uat") | .number')
           COMMIT_MSG=$(git log -1 --pretty=%B)
@@ -50,11 +50,11 @@ jobs:
         uses: octokit/request-action@v2.x
         with:
           route: GET /repos/${{ github.repository }}/pulls
-          headers: '{"authorization": "token ${{ secrets.GITHUB_TOKEN }}"}'
+          headers: '{"authorization": "token ${{ secrets.SECRET_GITHUB_TOKEN }}"}'
 
       - name: Create PR from uat to main
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
         run: |
           EXISTING_MAIN_PR=$(echo '${{ steps.check_main_pr.outputs.data }}' | jq -r '.[] | select(.head.ref == "uat" and .base.ref == "main") | .number')
 
@@ -69,7 +69,7 @@ jobs:
     steps:
       - name: Label PR Based on Changes
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           CHANGED_FILES=$(gh pr view $PR_NUMBER --json files -q '.files[].path')
@@ -87,7 +87,7 @@ jobs:
 
       - name: Assign Reviewers
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           gh pr edit $PR_NUMBER --add-reviewer "team-lead"
