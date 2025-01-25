@@ -1,3 +1,4 @@
 1. P.R created tested
 2. Don't create P.R if already exist from that branch
 3. checking again step2
+4. Raise p.r if there is no pr riased to uat (uat->main exist but local branch -> uat doesn't exist)
