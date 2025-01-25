@@ -1,0 +1,43 @@
+name: Auto UAT Branch Recreation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  recreate-uat-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Delete and recreate the 'uat' branch
+        env:
+          BRANCH_NAME: "uat"
+        run: |
+          # Fetch all branches and tags
+          git fetch --prune
+
+          # Delete branch locally if exists
+          if git show-ref --verify --quiet refs/heads/$BRANCH_NAME; then
+            git branch -D $BRANCH_NAME
+          fi
+
+          # Delete branch remotely if exists
+          if git ls-remote --exit-code --heads origin $BRANCH_NAME; then
+            git push origin --delete $BRANCH_NAME
+          fi
+
+          # Create a new branch from main
+          git checkout main
+          git checkout -b $BRANCH_NAME
+
+          # Push the new branch to origin
+          git push origin $BRANCH_NAME
