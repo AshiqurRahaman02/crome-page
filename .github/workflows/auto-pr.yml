@@ -46,6 +46,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set PR Title from Merged PR
+        run: echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+
       - name: Check for Existing PR to main
         id: check_main_pr
         env:
@@ -59,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
         run: |
           if [[ -z "$EXISTING_MAIN_PR" ]]; then
-            gh pr create --base main --head uat --title "Auto PR: uat → main" --body "Merging changes from uat into main"
+            gh pr create --base main --head uat --title "$PR_TITLE" --body "Merging changes from uat to main"
           else
             echo "PR already exists from uat to main (#$EXISTING_MAIN_PR), skipping creation."
           fi
