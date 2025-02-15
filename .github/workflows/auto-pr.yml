@@ -14,4 +14,4 @@ jobs:
     with:
       target_branch: "uat"
     secrets:
-      github_token: ${{ secrets.SECRET_GITHUB_TOKEN }}
+      SECRET_GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
