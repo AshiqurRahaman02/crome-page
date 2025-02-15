@@ -1,4 +1,4 @@
-name: Auto PR Creation
+name: Call Reusable Auto PR Workflow
 
 on:
   push:
@@ -9,60 +9,9 @@ on:
     types: [closed]
 
 jobs:
-  create_pr_to_uat:
-    if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/uat'  # Prevent PRs from main & uat
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Extract Branch Name
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-
-      - name: Check for Existing PR to uat
-        id: check_pr
-        env:
-          GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
-        run: |
-          EXISTING_PR=$(gh pr list --state open --base uat --json number,headRefName --jq '.[] | select(.headRefName == "${{ env.BRANCH_NAME }}") | .number')
-          echo "EXISTING_PR=$EXISTING_PR" >> $GITHUB_ENV
-
-      - name: Create or Update PR to uat
-        env:
-          GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
-        run: |
-          COMMIT_MSG=$(git log -1 --format=%s)
-
-          if [[ -z "$EXISTING_PR" ]]; then
-            gh pr create --base uat --head "${{ env.BRANCH_NAME }}" --title "Auto PR: $COMMIT_MSG" --body "Merging changes from ${{ env.BRANCH_NAME }} to uat"
-          else
-            echo "PR already exists (#$EXISTING_PR), skipping creation."
-          fi
-
-  create_pr_to_main:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'uat'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set PR Title from Merged PR
-        run: echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
-
-      - name: Check for Existing PR to main
-        id: check_main_pr
-        env:
-          GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
-        run: |
-          EXISTING_MAIN_PR=$(gh pr list --state open --base main --json number,headRefName --jq '.[] | select(.headRefName == "uat") | .number')
-          echo "EXISTING_MAIN_PR=$EXISTING_MAIN_PR" >> $GITHUB_ENV
-
-      - name: Create PR from uat to main
-        env:
-          GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
-        run: |
-          if [[ -z "$EXISTING_MAIN_PR" ]]; then
-            gh pr create --base main --head uat --title "$PR_TITLE" --body "Merging changes from uat to main"
-          else
-            echo "PR already exists from uat to main (#$EXISTING_MAIN_PR), skipping creation."
-          fi
+  auto-pr:
+    uses: AshiqurRahaman02/org-workflows/.github/workflows/reusable-workflow.yml@main
+    with:
+      target_branch: "uat"
+    secrets:
+      github_token: ${{ secrets.SECRET_GITHUB_TOKEN }}
